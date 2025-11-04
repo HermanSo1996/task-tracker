@@ -9,10 +9,11 @@ else:
     with open("taskdata.json", 'w') as file:
         json.dump({"tasks":[]}, file)
 
+print("This is the task tracker")
+
 flag = True
 while flag == True:
 
-    print("This is the task tracker")
     print("Select an option:"
         "\n1. add"
         "\n2. update"
@@ -40,3 +41,11 @@ while flag == True:
         with open("taskdata.json") as json_file:
             data = json.load(json_file)
             print(data)
+
+    if command[0] == "delete":
+        with open("taskdata.json") as json_file:
+            data = json.load(json_file)
+            temp = data["tasks"]
+            del temp[int(command[1])-1]
+        with open("taskdata.json", 'w') as json_file:
+            json.dump(data,json_file)
