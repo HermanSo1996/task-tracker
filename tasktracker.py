@@ -1,6 +1,6 @@
 import json
 import os
-
+import datetime
 
 if os.path.isfile("taskdata.json") and os.access("taskdata.json", os.R_OK):
     print("File exists and is readable")
@@ -31,7 +31,7 @@ while flag == True:
         with open("taskdata.json") as json_file:
             data = json.load(json_file)
             temp = data["tasks"]
-            f = {"taskname": str(command[1]), "status": "created"}
+            f = {"id": (len(temp)+1), "description": str(command[1]), "status": "to-do", "createdAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")), "updatedAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))}
             temp.append(f)
         with open("taskdata.json", 'w') as json_file:
             json.dump(data, json_file)
