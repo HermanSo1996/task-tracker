@@ -30,13 +30,12 @@ while flag == True:
         with open("taskdata.json") as json_file:
             data = json.load(json_file)
             temp = data["tasks"]
-            print(temp)
             f = {"taskname": str(command[1]), "status": "created"}
             temp.append(f)
-            print(temp)
-            print(data)
         with open("taskdata.json", 'w') as json_file:
             json.dump(data, json_file)
+        print("Task added with ID: " +str(len(temp)))
+
     if command[0] == "list":
         with open("taskdata.json") as json_file:
             data = json.load(json_file)
