@@ -1,17 +1,13 @@
 import json
 import os
 
-file_path = r"C:\Users\miste\Task Tracker CLI\taskdata.json"
 
-if os.path.isfile(file_path) and os.access(file_path, os.R_OK):
+if os.path.isfile("taskdata.json") and os.access("taskdata.json", os.R_OK):
     print("File exists and is readable")
-    with open(file_path, 'r') as file:
-        tasklist = json.load(file)
 else:
     print("File does not exist, creating file")
-    with open(file_path, 'w') as file:
-        json.dump({}, file)
-    tasklist = file
+    with open("taskdata.json", 'w') as file:
+        json.dump({"tasks":[]}, file)
 
 flag = True
 while flag == True:
@@ -25,7 +21,23 @@ while flag == True:
         "\n5. mark-done"
         "\n6. list"
         "\n7. exit")
-
+    
     option = input(">")
     if option == "exit":
         flag = False
+    command = option.split()
+    if command[0] == "add":
+        with open("taskdata.json") as json_file:
+            data = json.load(json_file)
+            temp = data["tasks"]
+            print(temp)
+            f = {"taskname": str(command[1]), "status": "created"}
+            temp.append(f)
+            print(temp)
+            print(data)
+        with open("taskdata.json", 'w') as json_file:
+            json.dump(data, json_file)
+    if command[0] == "list":
+        with open("taskdata.json") as json_file:
+            data = json.load(json_file)
+            print(data)
