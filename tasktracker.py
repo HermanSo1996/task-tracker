@@ -18,15 +18,15 @@ while flag == True:
         "\n1. add"
         "\n2. update"
         "\n3. delete"
-        "\n4. mark-in-progress"
-        "\n5. mark-done"
-        "\n6. list"
-        "\n7. exit")
+        "\n4. change status"
+        "\n5. list"
+        "\n6. exit")
     
     option = input(">")
     if option == "exit":
         flag = False
     command = option.split()
+
     if command[0] == "add":
         with open("taskdata.json") as json_file:
             data = json.load(json_file)
@@ -34,7 +34,7 @@ while flag == True:
             f = {"id": (len(temp)+1), "description": str(command[1]), "status": "to-do", "createdAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")), "updatedAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))}
             temp.append(f)
         with open("taskdata.json", 'w') as json_file:
-            json.dump(data, json_file)
+            json.dump(data, json_file, indent=2)
         print("Task added with ID: " +str(len(temp)))
 
     if command[0] == "list":
@@ -48,4 +48,16 @@ while flag == True:
             temp = data["tasks"]
             del temp[int(command[1])-1]
         with open("taskdata.json", 'w') as json_file:
-            json.dump(data,json_file)
+            json.dump(data,json_file, indent=2)
+
+    if command[0] == "update":
+        with open("taskdata.json") as json_file:
+            data = json.load(json_file)
+            temp = data["tasks"]
+            tempid = temp[int(command[1])-1]["id"]
+            temptime = temp[int(command[1])-1]["createdAt"]
+            tempdesc = temp[int(command[1])-1]["id"]
+        if type(int(command[1])) == int and len(command):
+            temp[int(command[1])-1] = {"id": str(tempid), "description": str(command[2]), "status": "to-do", "createdAt": str(temptime), "updatedAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))}
+        with open("taskdata.json", 'w') as json_file:
+            json.dump(data,json_file,indent=2)
