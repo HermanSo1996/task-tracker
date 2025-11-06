@@ -40,8 +40,28 @@ while flag == True:
 
     if command[0] == "list":
         with open("taskdata.json") as json_file:
-            data = json.load(json_file)
+                data = json.load(json_file)
+                temp = data["tasks"]
+        if len(command) == 1:
             print(data)
+        elif command[1] == "done":
+            templist = []
+            for i in range(0, len(temp)):
+                if temp[i]["status"] == "done":
+                    templist.append(temp[i])
+            print(templist)
+        elif command[1] == "in-progress":
+            templist = []
+            for i in range(0, len(temp)):
+                if temp[i]["status"] == "in-progress":
+                    templist.append(temp[i])
+            print(templist)
+        elif command[1] == "to-do":
+            templist = []
+            for i in range(0, len(temp)):
+                if temp[i]["status"] == "to-do":
+                    templist.append(temp[i])
+            print(templist)
 
     if command[0] == "delete":
         with open("taskdata.json") as json_file:
