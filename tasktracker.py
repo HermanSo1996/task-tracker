@@ -10,7 +10,7 @@ def addtask(jsonfile):
     with open(jsonfile) as json_file:
         data = json.load(json_file)
         temp = data["tasks"]
-        f = {"id": (len(temp)+1), "description": str(command[1]), "status": "to-do", "createdAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")), "updatedAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))}
+        f = {"id": (len(temp)+1), "description": str(command[1]), "status": "todo", "createdAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")), "updatedAt": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))}
         temp.append(f)
     writeJson(jsonfile,data)
     print("Task added with ID: " +str(len(temp)))
@@ -33,10 +33,10 @@ def listtask(jsonfile):
                 if temp[i]["status"] == "in-progress":
                     templist.append(temp[i])
             print(templist)
-        elif command[1] == "to-do":
+        elif command[1] == "todo":
             templist = []
             for i in range(0, len(temp)):
-                if temp[i]["status"] == "to-do":
+                if temp[i]["status"] == "todo":
                     templist.append(temp[i])
             print(templist)
 
@@ -97,18 +97,53 @@ while flag == True:
     if option == "exit":
         flag = False
     command = option.split()
+    
+    possibleoptions = ["add", "list", "delete", "update", "mark-in-progress", "mark-done","exit"]
 
-    if command[0] == "add":
-        addtask("taskdata.json")
+    try:
+        assert command[0] in possibleoptions
+        
+        if command[0] == "add":
+            addtask("taskdata.json")
 
-    if command[0] == "list":
-        listtask("taskdata.json")
+        if command[0] == "list":
+            possibleoptions = ["done","todo","in-progress"]
+            try:
+                if len(command) > 1:
+                    assert command[1] in possibleoptions
+                listtask("taskdata.json")
+            except AssertionError as e:
+                print("Please enter a valid task status to list by")
 
-    if command[0] == "delete":
-        delete("taskdata.json")
+        if command[0] == "delete":
+            try:
+                assert int(command[1]) > 0
+                delete("taskdata.json")
+            except AssertionError as e:
+                print("Please enter a valid index")
+            except ValueError as e:
+                print("Please enter a valid index")
+            except IndexError as e:
+                print("Task is not in list, please select a valid task")
+            
 
-    if command[0] == "update":
-        updatedesc("taskdata.json")
+        if command[0] == "update":
+            #add in error handling
+            updatedesc("taskdata.json")
 
-    if command[0] == "mark-in-progress" or command[0] == "mark-done":
-        updatestatus("taskdata.json")
+        if command[0] == "mark-in-progress" or command[0] == "mark-done":
+            try:
+                assert int(command[1]) > 0
+                updatestatus("taskdata.json")
+            except AssertionError as e:
+                print("Please enter a valid index")
+            except ValueError as e:
+                print("Please enter a valid index")
+            except IndexError as e:
+                print("Task is not in list, please select a valid task")           
+
+    except IndexError as e:
+        print("Please enter a valid command")
+    
+    except AssertionError as e:
+        print("Please enter a valid command")
