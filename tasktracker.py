@@ -128,8 +128,20 @@ while flag == True:
             
 
         if command[0] == "update":
-            #add in error handling
-            updatedesc("taskdata.json")
+            print(type(command[1]))
+            try:
+                if int(command[1])<1:
+                    raise ValueError
+                if len(command) < 3:
+                    raise AssertionError
+                else:
+                    updatedesc("taskdata.json")
+            except ValueError as e:
+                print("Please enter a valid index")
+            except IndexError as e:
+                print("Please enter a valid index")
+            except AssertionError as e:
+                print("Please enter a value to update")    
 
         if command[0] == "mark-in-progress" or command[0] == "mark-done":
             try:
